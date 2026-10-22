@@ -1,0 +1,13 @@
+package org.firstinspires.ftc.teamcode
+
+import dev.nextftc.robot.NextRobot
+import dev.nextftc.robot.Mechanism
+import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain
+
+class MyRobot : NextRobot {
+
+    val drivetrain = Drivetrain()
+
+    override val mechanisms: Set<Mechanism>
+        get() = setOf(drivetrain)
+}

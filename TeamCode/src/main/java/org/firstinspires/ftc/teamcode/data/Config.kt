@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode.data
 
-object Config {
-    //Control Hub
-    var frontLeftMotor: Int = 0
-    var backLeftMotor: Int = 1
-    var frontRightMotor: Int = 2
-    var backRightMotor: Int = 3
-    var leftIntakeServo: Int = 0
-    var rightIntakeServo: Int = 1
-    var hoodServo: Int = 2
+enum class Config(val deviceName: String) {
+    frontRight("frontRightMotor"),
+    backRight("backRightMotor"),
+    frontLeft("frontLeftMotor"),
+    backLeft("backLeftMotor"),
+    launcher("launchMotor"),
+    intake("intakeMotor"),
 
-    //Expansion hub
-    var launchMotor: Int = 0
-    var intakeMotor: Int = 1
+    turret("turretServo"),
+    hood("hoodServo"),
+
+    pinpoint("pinpoint"),
+
+    turretCam("HuskyLens"),
 }
