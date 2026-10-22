@@ -12,10 +12,11 @@ import com.pedropathing.ivy.pedro.PedroCommands.follow
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.pedropathing.paths.interpolator.Interpolator
+import dev.nextftc.robot.opmode.NextAutonomous
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
-@Autonomous(name = "AutoPath", group = "Autonomous")
-class AutoPath : LinearOpMode() {
+@NextAutonomous(name = "Auto")
+class Auto : LinearOpMode() {
 
     private lateinit var follower: Follower
 
