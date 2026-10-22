@@ -4,8 +4,8 @@ import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import org.firstinspires.ftc.teamcode.MyRobot
 
-@NextTeleop
-class DrivetrainTeleOp(
+@NextTeleop("MainTeleOp")
+class MainTeleOp(
     val robot: MyRobot
 ) : NextOpMode(robot) {
 
