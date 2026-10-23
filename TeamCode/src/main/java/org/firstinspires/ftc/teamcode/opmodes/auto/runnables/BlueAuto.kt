@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode
+package org.firstinspires.ftc.teamcode.opmodes.auto.runnables
 
 import com.pedropathing.api.Paths
 import com.pedropathing.api.PoseFactory
@@ -9,17 +9,15 @@ import com.pedropathing.ivy.Scheduler
 import com.pedropathing.ivy.Scheduler.schedule
 import com.pedropathing.ivy.groups.Groups.sequential
 import com.pedropathing.ivy.pedro.PedroCommands.follow
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.pedropathing.paths.interpolator.Interpolator
 import dev.nextftc.robot.opmode.NextAutonomous
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
-@NextAutonomous(name = "Auto")
-class Auto : LinearOpMode() {
+@NextAutonomous(name = "Blue Auto")
+class BlueAuto : LinearOpMode() {
 
     private lateinit var follower: Follower
-
     private val poseFactory = PoseFactory.degrees()
 
     private val start = poseFactory.of(56.0, 8.0, 90.0)

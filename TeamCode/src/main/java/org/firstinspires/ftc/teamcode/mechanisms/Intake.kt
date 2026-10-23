@@ -14,7 +14,7 @@ class Intake : Mechanism {
         get() = abs(intakeMotor.throttle) > 0.1
 
     init {
-        intakeMotor.direction = NextMotor.Direction.REVERSE
+        intakeMotor.direction = NextMotor.Direction.FORWARD
     }
 
     fun intake(): Command = Command.build()
