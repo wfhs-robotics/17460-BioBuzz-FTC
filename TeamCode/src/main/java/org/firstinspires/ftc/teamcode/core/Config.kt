@@ -7,13 +7,13 @@ enum class Config(val deviceName: String) {
     frontLeft("frontLeftMotor"),
     backLeft("backLeftMotor"),
     // Motors
-    launcher("launchMotor"),
+
     intake("intakeMotor"),
-    // Turrel
-    turret("turretServo"),
+    // Turret
+    launcher("launchMotor"),
     hood("hoodServo"),
-
+    //Odometry
     pinpoint("pinpoint"),
-
-    turretCam("HuskyLens"),
+    // Cam
+    Cam("HuskyLens"),
 }
