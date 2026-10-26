@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.data
+package org.firstinspires.ftc.teamcode.core
 
 enum class Config(val deviceName: String) {
     // Drivetrain

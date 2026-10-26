@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.ivy.Command
-import com.pedropathing.math.Pose
 import dev.nextftc.hardware.actuators.NextServo
 import dev.nextftc.robot.Mechanism
-import org.firstinspires.ftc.teamcode.data.Config
+import org.firstinspires.ftc.teamcode.core.Config
 
 class TurretHood : Mechanism {
     val hoodServo = NextServo(Config.hood.deviceName)

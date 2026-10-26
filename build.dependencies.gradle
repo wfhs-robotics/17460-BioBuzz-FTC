@@ -1,6 +1,7 @@
 repositories {
     mavenCentral()
     maven { url 'https://repo.dairy.foundation/releases/'}
+    maven { url = 'https://jitpack.io' }
     google() // Needed for androidx
 }
 
@@ -16,6 +17,17 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.pedropathing:revhub:3.0.2'
-    implementation 'com.pedropathing:tuning:1.0.2'
+    implementation 'com.pedropathing:tuning:1.0.3-beta.1'
+
     implementation 'com.pedropathing.ivy:pedro:1.1.1'
+
+    implementation 'dev.nextftc.v2:control:0.3.0'
+    implementation 'dev.nextftc.v2:hardware:0.3.0'
+    implementation 'dev.nextftc.v2:robot:0.3.0'
+
+    implementation "dev.frozenmilk.sinister:Sloth:0.3.2"
+
+    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-core:v1.4.3'
+    implementation 'dev.ftcautotune.FtcAutoTune:pidautotuner-ftc:v1.4.3'
+
 }

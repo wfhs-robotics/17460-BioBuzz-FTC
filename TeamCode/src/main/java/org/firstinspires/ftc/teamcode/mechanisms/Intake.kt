@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.mechanisms
 
 import com.pedropathing.ivy.Command
-import dev.nextftc.hardware.RobotController
 import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.robot.Mechanism
-import org.firstinspires.ftc.teamcode.data.Config
+import org.firstinspires.ftc.teamcode.core.Config
 import kotlin.math.abs
 
 class Intake : Mechanism {
@@ -17,15 +16,15 @@ class Intake : Mechanism {
         intakeMotor.direction = NextMotor.Direction.FORWARD
     }
 
-    fun intake(): Command = Command.build()
-        .setStart { intakeMotor.throttle = 1.0 }
-        .setEnd { _ -> intakeMotor.throttle = 0.0 }
-        .requiring(this)
+    fun intake(): Command = infinite {
+        intakeMotor.throttle = 1.0
+    }
 
-    fun outtake(): Command = Command.build()
-        .setStart { intakeMotor.throttle = -1.0 }
-        .setEnd { _ -> intakeMotor.throttle = 0.0 }
-        .requiring(this)
+    fun outtake(): Command = infinite {
+        intakeMotor.throttle = -1.0
+    }
 
-    fun stop(): Command = instant { intakeMotor.throttle = 0.0 }
+    fun stop(): Command = instant {
+        intakeMotor.throttle = 0.0
+    }
 }

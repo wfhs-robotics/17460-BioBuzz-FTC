@@ -1,13 +1,6 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://repo.dairy.foundation/releases' }
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'org.jetbrains.kotlin.android'
+
 //
 // build.gradle in TeamCode
 //
@@ -27,27 +20,19 @@ apply from: '../build.dependencies.gradle'
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    compileSdk 34
+    defaultConfig {
+        minSdk 24
+    }
+
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
-    }
-}
-
-repositories {
-    maven {
-        url 'https://repo.dairy.foundation/releases'
-    }
-}
-
 dependencies {
     implementation project(':FtcRobotController')
-    //NextFTC V2
-    implementation 'dev.nextftc.v2:control:0.3.0'
-    implementation 'dev.nextftc.v2:hardware:0.3.0'
-    implementation 'dev.nextftc.v2:robot:0.3.0'
 }
