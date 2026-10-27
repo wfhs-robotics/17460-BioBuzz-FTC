@@ -19,10 +19,10 @@ public class Constants {
 
     public static MecanumConfig drivetrainConfig =
             new MecanumConfig(c -> {
-                c.frontLeftName.set("frontLeft");
-                c.frontRightName.set("frontRight");
-                c.backLeftName.set("backLeft");
-                c.backRightName.set("backRight");
+                c.frontLeftName.set("frontLeftMotor");
+                c.frontRightName.set("frontRightMotor");
+                c.backLeftName.set("backLeftMotor");
+                c.backRightName.set("backRightMotor");
 
                 // Verify these using the Mecanum tuner.
                 c.frontLeftDirection.set(DcMotorSimple.Direction.FORWARD);
@@ -32,6 +32,7 @@ public class Constants {
 
                 c.manualBrakeMode.set(true);
             });
+
 
     public static PinpointConfig localizerConfig =
             new PinpointConfig(c -> {
@@ -88,6 +89,7 @@ public class Constants {
                 new PinpointLocalizer(h, localizerConfig),
                 new Mecanum(h, drivetrainConfig),
                 new Foresight(foresightConfig)
+
         );
     }
 }
