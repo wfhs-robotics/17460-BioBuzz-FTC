@@ -84,15 +84,6 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         driver.leftBumper
             .toggleOnTrue(robot.intake.outtake())
 
-        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isOver(0.5))
-            .toggleOnTrue(instant { robot.follower.setPose(PoseManager.masterResetPose) })
-
-        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isUnder(0.5))
-            .toggleOnTrue(instant { robot.follower.setPose(PoseManager.getResetPose(robot.follower.pose())) })
-
-        driver.y.onTrue(instant {driveScalar = 0.5})
-        driver.y.onFalse(instant {driveScalar = 1.0})
-
         // Operator Controls
 
         operator.dpadUp.onTrue(instant { robot.shooter.manualOffset += 10 })
