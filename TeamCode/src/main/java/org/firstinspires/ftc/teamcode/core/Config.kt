@@ -15,5 +15,5 @@ enum class Config(val deviceName: String) {
     //Odometry
     pinpoint("pinpoint"),
     // Cam
-    Cam("HuskyLens"),
+    Cam("huskylens"),
 }

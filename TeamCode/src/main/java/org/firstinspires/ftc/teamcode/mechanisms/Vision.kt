@@ -5,5 +5,5 @@ import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.Config
 
 class Vision : Mechanism {
-    val turretCam = NextHuskyLens(Config.turretCam.deviceName)
+    val Cam = NextHuskyLens(Config.Cam.deviceName)
     }
