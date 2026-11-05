@@ -7,9 +7,6 @@ import org.firstinspires.ftc.teamcode.MyRobot
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-/**
- * shot parameters using Inverse Distance Weighting (IDW) interpolation.
- */
 object BiLinearShooter {
     var projectedX = 0.0
     var projectedY = 0.0
@@ -80,9 +77,6 @@ object BiLinearShooter {
         return ShotParameters(velocityInterp, angleInterp)
     }
 
-    /**
-     * Update shooter, hood, and spindexer based on calculated parameters.
-     */
     fun applyShot(params: ShotParameters, robot: MyRobot) {
         robot.turrethood.targetPosition = params.angle + robot.turrethood.manualOffset
         robot.turrethood.update().schedule()

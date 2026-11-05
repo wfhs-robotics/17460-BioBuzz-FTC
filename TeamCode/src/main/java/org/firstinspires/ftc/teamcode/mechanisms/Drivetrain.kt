@@ -7,7 +7,7 @@ import dev.nextftc.hardware.actuators.NextMotor
 import dev.nextftc.robot.Mechanism
 import dev.nextftc.robot.drive.mecanumDrive
 import org.firstinspires.ftc.teamcode.core.Config
-
+import dev.nextftc.robot.drive.mecanumDriveFieldCentric
 class Drivetrain : Mechanism {
 
     val frontLeft = NextMotor(Config.frontLeft.deviceName)
@@ -21,4 +21,5 @@ class Drivetrain : Mechanism {
     }
 
     fun startDrive(gamepad: Gamepad): Command = mecanumDrive(frontLeft, frontRight, backLeft, backRight, gamepad)
+    fun startFieldCentricDrive(gamepad: Gamepad, heading: () -> Double): Command = mecanumDriveFieldCentric(frontLeft, frontRight, backLeft, backRight, gamepad, heading)
 }

@@ -4,9 +4,6 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 
-/**
- * CSV logging of robot data to SD card
- */
 class RobotLogger {
     private val writer: BufferedWriter
 
