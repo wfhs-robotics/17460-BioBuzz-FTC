@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms
 import com.pedropathing.math.Pose
 import com.qualcomm.hardware.dfrobot.HuskyLens
 import dev.nextftc.hardware.RobotController.hardwareMap
+import dev.nextftc.hardware.webcams.NextHuskyLens
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.PoseManager
 
@@ -13,7 +14,7 @@ class HiveManager : Mechanism {
 
     private val targetTagId = if (PoseManager.redAlliance) RED_TARGET_ID else BLUE_TARGET_ID
 
-    private val huskyLens = hardwareMap.get(HuskyLens::class.java, "huskylens")
+    private val huskyLens = NextHuskyLens("huskyLens")
 
 
     var targetHorizontalPixelOffset = 0

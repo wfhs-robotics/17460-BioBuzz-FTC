@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop
 
 import com.pedropathing.follower.ManualDrive
 import com.pedropathing.follower.ManualDrive.fieldCentric
+import com.pedropathing.ivy.commands.Commands
 import com.pedropathing.ivy.commands.Commands.instant
 import com.pedropathing.math.Pose
+import dev.nextftc.robot.drive.scalar
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
@@ -117,7 +119,9 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         val operator = CommandGamepad(gamepad2)
 
         // Driver Controls
-
+        driver.leftBumper.whileTrue(
+            Commands.infinite { scalar = 0.4 }.setEnd { scalar = 1.0 },
+        )
         // Operator Controls
 
         operator.rightBumper.toggleOnTrue(robot.intake.intake())
