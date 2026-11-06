@@ -7,7 +7,9 @@ import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.opmode.NextAutonomous
 import dev.nextftc.robot.opmode.NextOpMode
 import org.firstinspires.ftc.teamcode.MyRobot
+import org.firstinspires.ftc.teamcode.OpModeStorage
 import org.firstinspires.ftc.teamcode.pedro.Constants
+
 
 @NextAutonomous("Auto1","Auto","MainTeleOp")
 class Auto1(val robot: MyRobot) : NextOpMode(robot){
@@ -35,5 +37,9 @@ class Auto1(val robot: MyRobot) : NextOpMode(robot){
     }
 
     override fun periodic() {
+    }
+
+    override fun stop() {
+        OpModeStorage.autonomousEndPose = follower.pose() //saves your position in that file
     }
 }

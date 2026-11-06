@@ -33,9 +33,7 @@ object BiLinearShooter {
     private const val IDW_POWER = 2.0
     private const val EPSILON = 1e-6
 
-    /**
-     * Get shot parameters based on current field position and velocity.
-     */
+
     fun getShot(x: Double, y: Double, velocity: Vector, hiveOnRight: Boolean): ShotParameters {
         val x = if (hiveOnRight) x else -x
 

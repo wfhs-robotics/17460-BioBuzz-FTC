@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode.opmodes.teleop
 
-import com.pedropathing.follower.ManualDrive
-import com.pedropathing.follower.ManualDrive.fieldCentric
 import com.pedropathing.ivy.commands.Commands
 import com.pedropathing.ivy.commands.Commands.instant
-import com.pedropathing.math.Pose
 import dev.nextftc.robot.drive.scalar
 import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.MyRobot
+import org.firstinspires.ftc.teamcode.OpModeStorage
 import org.firstinspires.ftc.teamcode.core.PoseManager
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.RobotLogger
-import java.sql.Driver
-import kotlin.time.Clock.System.now
 
 private const val TELEMETRY_INTERVAL: Int = 250
 private var firstOnUpdate = true
@@ -29,7 +25,6 @@ private var FieldCentric = false
 @NextTeleop("MainTeleOp")
 class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
     private lateinit var logger: RobotLogger
-    private var driveScalar = 1.0
 
     override fun disabledPeriodic() {
         if (gamepad1.a) FieldCentric = false
@@ -41,7 +36,7 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
     }
 
     override fun start() {
-        robot.follower.setPose(PoseManager.EndPose)
+        robot.follower.setPose(OpModeStorage.autonomousEndPose)
         buildDriverControls()
         logger = RobotLogger()
         startSystemTime = System.currentTimeMillis()
@@ -120,7 +115,7 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
 
         // Driver Controls
         driver.leftBumper.whileTrue(
-            Commands.infinite { scalar = 0.4 }.setEnd { scalar = 1.0 },
+            Commands.infinite { scalar = 0.5 }.setEnd { scalar = 1.0 },
         )
         // Operator Controls
 
