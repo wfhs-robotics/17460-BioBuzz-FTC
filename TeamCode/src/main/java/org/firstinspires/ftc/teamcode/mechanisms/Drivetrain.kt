@@ -1,7 +1,6 @@
 
 package org.firstinspires.ftc.teamcode.mechanisms
 
-import com.pedropathing.follower.ManualDrive
 import com.pedropathing.ivy.Command
 import com.qualcomm.robotcore.hardware.Gamepad
 import dev.nextftc.hardware.actuators.NextMotor
@@ -18,11 +17,5 @@ class Drivetrain : Mechanism {
     val backLeft = NextMotor(Config.backLeft.deviceName)
     val backRight = NextMotor(Config.backRight.deviceName)
 
-    init {
-        frontRight.direction = NextMotor.Direction.REVERSE
-        backRight.direction = NextMotor.Direction.REVERSE
-    }
-
     fun startDrive(gamepad: Gamepad): Command = mecanumDrive(frontLeft, frontRight, backLeft, backRight, gamepad)
-    fun startFieldCentricDrive(gamepad: Gamepad, heading: () -> Double): Command = mecanumDriveFieldCentric(frontLeft, frontRight, backLeft, backRight, gamepad, heading)
 }

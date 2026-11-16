@@ -7,10 +7,11 @@ import dev.nextftc.robot.opmode.NextOpMode
 import dev.nextftc.robot.opmode.NextTeleop
 import dev.nextftc.robot.triggers.CommandGamepad
 import org.firstinspires.ftc.teamcode.MyRobot
-import org.firstinspires.ftc.teamcode.OpModeStorage
 import org.firstinspires.ftc.teamcode.core.PoseManager
+import org.firstinspires.ftc.teamcode.opmodes.OpModeStorage
 import org.firstinspires.ftc.teamcode.utils.BiLinearShooter
 import org.firstinspires.ftc.teamcode.utils.RobotLogger
+import org.firstinspires.ftc.teamcode.utils.ZoneDetection
 
 private const val TELEMETRY_INTERVAL: Int = 250
 private var firstOnUpdate = true
@@ -19,40 +20,21 @@ private var maxLoopTime = 0.0
 private var minLoopTime = Double.MAX_VALUE
 private var lastTelemetryTime = 0.0
 private var startSystemTime = 0.toLong()
-private var FieldCentric = false
 
 
 @NextTeleop("MainTeleOp")
 class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
     private lateinit var logger: RobotLogger
 
-    override fun disabledPeriodic() {
-        if (gamepad1.a) FieldCentric = false
-        if (gamepad1.b) FieldCentric = true
-
-        telemetry.addLine("A: Robot-centric   |   B: Field-centric")
-        telemetry.addData("Drive mode", if (FieldCentric) "Field-centric" else "Robot-centric")
-        telemetry.update()
-    }
-
     override fun start() {
         robot.follower.setPose(OpModeStorage.autonomousEndPose)
         buildDriverControls()
         logger = RobotLogger()
         startSystemTime = System.currentTimeMillis()
-        val driveCommand = if (FieldCentric) {
-            robot.drivetrain.startFieldCentricDrive(gamepad1) {
-                robot.follower.pose().heading()
-            }
-        } else {
-            robot.drivetrain.startDrive(gamepad1)
-        }
-        driveCommand.schedule()
+        robot.drivetrain.startDrive(gamepad1).schedule()
     }
 
     override fun periodic() {
-        robot.updateFollower()
-
         val now = System.nanoTime() / 1_000_000.0
 
         if (firstOnUpdate) {
@@ -70,6 +52,16 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         if (robot.follower.pose().y() > 72.0) robot.hiveManager.setHiveLeft()
         else robot.hiveManager.setHiveRight()
 
+        if (ZoneDetection.closeShootingZone == robot.follower.pose()) {
+        val shot = BiLinearShooter.getShot(
+            if (robot.hiveManager.hiveOnRight) {BiLinearShooter.projectedX} else -BiLinearShooter.projectedX,
+            BiLinearShooter.projectedY,
+            robot.follower.velocity().toVector(),
+            robot.hiveManager.hiveOnRight
+        )
+            BiLinearShooter.applyShot(shot, robot)
+    }
+        robot.updateFollower()
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
 
@@ -86,7 +78,6 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
             telemetry.addData("Hood", robot.turrethood.targetPosition + robot.turrethood.manualOffset)
 
             telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
-            telemetry.addLine(PoseManager.resetPoses.toString())
             telemetry.update()
 
             logger.log(
@@ -117,6 +108,13 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         driver.leftBumper.whileTrue(
             Commands.infinite { scalar = 0.5 }.setEnd { scalar = 1.0 },
         )
+
+        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isOver(0.5))
+            .toggleOnTrue(instant { robot.follower.setPose(PoseManager.masterResetPose) })
+
+        driver.rightTrigger.isOver(0.5).and(driver.leftTrigger.isUnder(0.5))
+            .toggleOnTrue(instant { robot.follower.setPose(PoseManager.getResetPose(robot.follower.pose())) })
+
         // Operator Controls
 
         operator.rightBumper.toggleOnTrue(robot.intake.intake())

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autos.ExampleAuto
+package org.firstinspires.ftc.teamcode.opmodes.auto
 
 import com.pedropathing.api.PoseFactory
 import com.pedropathing.follower.Follower
@@ -7,17 +7,17 @@ import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.opmode.NextAutonomous
 import dev.nextftc.robot.opmode.NextOpMode
 import org.firstinspires.ftc.teamcode.MyRobot
-import org.firstinspires.ftc.teamcode.OpModeStorage
+import org.firstinspires.ftc.teamcode.opmodes.OpModeStorage
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
 
-@NextAutonomous("Auto1","Auto","MainTeleOp")
-class Auto1(val robot: MyRobot) : NextOpMode(robot){
+@NextAutonomous("RedAuto","Auto","MainTeleOp")
+class RedAuto(val robot: MyRobot) : NextOpMode(robot){
     private var _follower: Follower? = null
     private val p: PoseFactory = PoseFactory.degrees()
 
-    private val startPose: Pose? = p.of(24.0, 24.0, 0.0)
-    private val park: Pose? = p.of(48.0, 48.0, 90.0)
+    private val startPose: Pose? = p.of(24.0, 24.0, 90.0)
+    private val park: Pose? = p.of(11.5, 90.0, 90.0)
 
     val follower: Follower
         get() {
@@ -37,9 +37,10 @@ class Auto1(val robot: MyRobot) : NextOpMode(robot){
     }
 
     override fun periodic() {
+
     }
 
-    override fun stop() {
+    override fun end() {
         OpModeStorage.autonomousEndPose = follower.pose() //saves your position in that file
     }
 }

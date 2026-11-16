@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.core
 
-import dev.nextftc.hardware.RobotController
-import dev.nextftc.hardware.actuators.NextMotor
-
 enum class Config(val deviceName: String) {
     // Drivetrain
     frontRight("frontRightMotor"),
@@ -17,6 +14,8 @@ enum class Config(val deviceName: String) {
     hood("hoodServo"),
     //Odometry
     pinpoint("pinpoint"),
+    // Sensor
+
     // Cam
     Cam("huskylens"),
 }
