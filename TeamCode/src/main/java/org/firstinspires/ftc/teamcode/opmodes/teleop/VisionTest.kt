@@ -18,7 +18,7 @@ class VisionTest(private val robot: MyRobot) : NextOpMode(robot) {
     }
 
     override fun periodic() {
-            hiveManager.visionUpdate().schedule()
+        hiveManager.updateVision()
 
             telemetry.addData("Target Visible", hiveManager.targetVisible)
             telemetry.addData("Hive Side", if (hiveManager.hiveOnRight) "RIGHT" else "LEFT")

@@ -32,4 +32,15 @@ class TurretHood : Mechanism {
         targetPosition = (targetPosition + adj).coerceIn(ANGLE_MIN, ANGLE_MAX)
         hoodServo.position = (targetPosition + manualOffset).coerceIn(ANGLE_MIN, ANGLE_MAX)
     }
+
+    fun setTargetPosition(position: Double) {
+        targetPosition = position.coerceIn(ANGLE_MIN, ANGLE_MAX)
+        hoodServo.position = (targetPosition + manualOffset)
+            .coerceIn(ANGLE_MIN, ANGLE_MAX)
+    }
+
+    fun adjustManualOffset(change: Double) {
+        manualOffset = (manualOffset + change).coerceIn(-0.15, 0.15)
+        setTargetPosition(targetPosition)
+    }
 }

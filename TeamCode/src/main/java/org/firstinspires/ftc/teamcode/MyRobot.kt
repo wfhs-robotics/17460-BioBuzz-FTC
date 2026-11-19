@@ -9,16 +9,19 @@ import org.firstinspires.ftc.teamcode.mechanisms.Intake
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter
 import org.firstinspires.ftc.teamcode.mechanisms.TurretHood
 import org.firstinspires.ftc.teamcode.pedro.Constants
+import org.firstinspires.ftc.teamcode.mechanisms.Indexer
 
 class MyRobot : NextRobot {
     val hiveManager by lazy { HiveManager() }
     val drivetrain by lazy { Drivetrain() }
     val intake by lazy { Intake() }
+    val indexer by lazy { Indexer() }
     val turretHood by lazy { TurretHood() }
     val shooter by lazy { Shooter() }
 
-    override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turretHood, drivetrain) }
-
+    override val mechanisms by lazy {
+        setOf(hiveManager, intake, indexer, shooter, turretHood, drivetrain)
+    }
 
     private var _follower: Follower? = null
 

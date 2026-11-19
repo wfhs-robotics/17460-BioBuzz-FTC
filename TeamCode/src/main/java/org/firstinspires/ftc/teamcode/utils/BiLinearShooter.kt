@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.utils
 
-import com.pedropathing.math.Pose
 import com.pedropathing.math.Vector
-import dev.nextftc.units.radians
 import org.firstinspires.ftc.teamcode.MyRobot
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -10,8 +8,6 @@ import kotlin.math.sqrt
 object BiLinearShooter {
     var projectedX = 0.0
     var projectedY = 0.0
-
-    var useZoneProjection = true
     var zoneProjectionLookahead = 0.4
 
     data class ShotParameters(val velocity: Double, val angle: Double)
@@ -34,8 +30,14 @@ object BiLinearShooter {
     private const val EPSILON = 1e-6
 
 
-    fun getShot(x: Double, y: Double, velocity: Vector, hiveOnRight: Boolean): ShotParameters {
-        val x = if (hiveOnRight) x else -x
+    fun getShot(
+        x: Double,
+        y: Double,
+        velocity: Vector,
+        hiveOnRight: Boolean
+    ): ShotParameters {
+        // Assumes your shot data uses signed x coordinates around x = 0.
+        val shotX = if (hiveOnRight) x else -x
 
         val velocityOffset = if (velocity.magnitude() > EPSILON) {
             velocity.normalized().times(velocity.magnitude() * zoneProjectionLookahead)
@@ -43,21 +45,17 @@ object BiLinearShooter {
             Vector(0.0, 0.0)
         }
 
-        projectedX = x + velocityOffset.elements[0]
+        projectedX = shotX + if (hiveOnRight) {
+            velocityOffset.elements[0]
+        } else {
+            -velocityOffset.elements[0]
+        }
         projectedY = y + velocityOffset.elements[1]
 
-        var distances = shotData.map { point ->
+        val distances = shotData.map { point ->
             val dx = projectedX - point.x
             val dy = projectedY - point.y
             sqrt(dx * dx + dy * dy)
-        }
-
-        if (!hiveOnRight) {
-            distances = shotData.map { point ->
-                val dx = -(projectedX - point.x)
-                val dy = projectedY - point.y
-                sqrt(dx * dx + dy * dy)
-            }
         }
 
         val minDistance = distances.minOrNull() ?: 0.0
@@ -69,15 +67,14 @@ object BiLinearShooter {
         val weights = distances.map { 1.0 / it.pow(IDW_POWER) }
         val totalWeight = weights.sum()
 
-        val velocityInterp = shotData.zip(weights).sumOf { it.first.velocity * it.second } / totalWeight
-        val angleInterp = shotData.zip(weights).sumOf { it.first.angle * it.second } / totalWeight
-
-        return ShotParameters(velocityInterp, angleInterp)
+        return ShotParameters(
+            velocity = shotData.zip(weights).sumOf { it.first.velocity * it.second } / totalWeight,
+            angle = shotData.zip(weights).sumOf { it.first.angle * it.second } / totalWeight
+        )
     }
 
     fun applyShot(params: ShotParameters, robot: MyRobot) {
-        robot.turretHood.targetPosition = params.angle
-        robot.turretHood.update().schedule()
-        robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
+        robot.turretHood.setTargetPosition(params.angle)
+        robot.shooter.setTargetSpeed(params.velocity + robot.shooter.manualOffset)
     }
 }

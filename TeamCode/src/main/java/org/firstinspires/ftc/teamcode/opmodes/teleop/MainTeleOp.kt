@@ -25,16 +25,20 @@ private val zoneDetection = ZoneDetection()
 
 @NextTeleop("MainTeleOp")
 class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
-    private lateinit var logger: RobotLogger
+
+    private var logger: RobotLogger? = null
 
     override fun start() {
+        robot.updateFollower()
         firstOnUpdate = true
         lastLoopTime = 0.0
         maxLoopTime = 0.0
         minLoopTime = Double.MAX_VALUE
         lastTelemetryTime = 0.0
 
-        robot.follower.setPose(OpModeStorage.autonomousEndPose)
+        robot.follower.setPose(
+            OpModeStorage.autonomousEndPose ?: PoseManager.masterResetPose
+        )
         buildDriverControls()
         logger = RobotLogger()
         startSystemTime = System.currentTimeMillis()
@@ -56,11 +60,9 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         if (loopTime > maxLoopTime) maxLoopTime = loopTime
         if (loopTime < minLoopTime) minLoopTime = loopTime
 
-        if (robot.follower.pose().y() > 72.0) {
-            robot.hiveManager.setHiveLeft().schedule()
-        } else {
-            robot.hiveManager.setHiveRight().schedule()
-        }
+        robot.updateFollower()
+
+        robot.hiveManager.hiveOnRight = robot.follower.pose().y() <= 72.0
 
         val pose = robot.follower.pose()
         val inShootingZone =
@@ -69,14 +71,13 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
 
         if (inShootingZone) {
             val shot = BiLinearShooter.getShot(
-            if (robot.hiveManager.hiveOnRight) {pose.x()} else -pose.x(),
-            pose.y(),
-            robot.follower.velocity().toVector(),
-            robot.hiveManager.hiveOnRight
-        )
+                pose.x(),
+                pose.y(),
+                robot.follower.velocity().toVector(),
+                robot.hiveManager.hiveOnRight
+            )
             BiLinearShooter.applyShot(shot, robot)
     }
-        robot.updateFollower()
         if (now - lastTelemetryTime > TELEMETRY_INTERVAL) {
             lastTelemetryTime = now
             val rpm = robot.shooter.motor.encoderVelocity.magnitude * 60.0 / (2.0 * Math.PI)
@@ -90,13 +91,13 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
             telemetry.addData("Max Loop Time", "%.2f ms".format(maxLoopTime))
             telemetry.addData("Target Pos", robot.hiveManager.getTargetPose())
 
-            telemetry.addData("Shooter", robot.shooter.targetVelocity + robot.shooter.manualOffset)
-            telemetry.addData("Hood", robot.turretHood.targetPosition + robot.turretHood.manualOffset)
+            telemetry.addData("Shooter target", robot.shooter.targetVelocity)
+            telemetry.addData("Hood target", robot.turretHood.targetPosition)
 
             telemetry.addData("Loop Hz", "%.2f".format(1000.0 / loopTime))
             telemetry.update()
 
-            logger.log(
+            logger?.log(
                 System.currentTimeMillis() - startSystemTime,
                 robot.follower.pose().x(),
                 robot.follower.pose().y(),
@@ -112,7 +113,7 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
 
     override fun end() {
         PoseManager.EndPose = robot.follower.pose()
-        logger.close()
+        logger?.close()
         robot.shooter.stop().schedule()
     }
 
@@ -139,9 +140,15 @@ class MainTeleOp(val robot: MyRobot) : NextOpMode(robot) {
         operator.leftBumper.whileTrue(robot.intake.outtake())
         operator.leftBumper.whileFalse(robot.intake.stop())
 
-        operator.dpadUp.onTrue(instant { robot.shooter.manualOffset += 10 })
-        operator.dpadDown.onTrue(instant { robot.shooter.manualOffset -= 10 })
-        operator.dpadRight.onTrue(instant { robot.turretHood.manualOffset += .05 })
-        operator.dpadLeft.onTrue(instant { robot.turretHood.manualOffset -= .05 })
+        operator.a.whileTrue(robot.indexer.feed())
+        operator.a.whileFalse(robot.indexer.stop())
+
+        operator.b.whileTrue(robot.indexer.reverse())
+        operator.b.whileFalse(robot.indexer.stop())
+
+        operator.dpadUp.onTrue(instant { robot.shooter.adjustManualOffset(10.0) })
+        operator.dpadDown.onTrue(instant { robot.shooter.adjustManualOffset(-10.0) })
+        operator.dpadRight.onTrue(instant { robot.turretHood.adjustManualOffset(0.05) })
+        operator.dpadLeft.onTrue(instant { robot.turretHood.adjustManualOffset(-0.05) })
     }
 }

@@ -50,9 +50,7 @@ class Shooter : Mechanism {
             }
 
             // Check if shooter has stabilized
-            if (abs(error) < 21.0 && !ready) {
-                ready = true
-            }
+            ready = abs(error) < 21.0
 
         } else {
             motor.throttle = 0.0
@@ -60,21 +58,32 @@ class Shooter : Mechanism {
         }
     }
 
-    fun spinAtSpeed(speed: Double): Command = Command.build()
-        .setStart {
-            targetVelocity = speed.coerceIn(0.0, MAX_SPEED)
-            active = true
-            ready = false
-            timer.reset()
-        }.requiring(this)
+    fun spinAtSpeed(speed: Double): Command = instant {
+        setTargetSpeed(speed)
+    }.requiring(this)
 
     fun stop(): Command = instant {
         active = false
         targetVelocity = 0.0
         ready = false
-    }
+    }.requiring(this)
 
     fun adjustSpeed(adj: Double) {
         targetVelocity = (targetVelocity + adj).coerceIn(0.0, MAX_SPEED)
+    }
+
+    fun setTargetSpeed(speed: Double) {
+        val newTarget = speed.coerceIn(0.0, MAX_SPEED)
+
+        if (abs(newTarget - targetVelocity) > 1.0) {
+            targetVelocity = newTarget
+            ready = false
+        }
+
+        active = true
+    }
+
+    fun adjustManualOffset(change: Double) {
+        manualOffset = (manualOffset + change).coerceIn(-300.0, 300.0)
     }
 }

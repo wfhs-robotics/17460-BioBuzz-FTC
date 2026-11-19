@@ -6,6 +6,7 @@ import dev.nextftc.hardware.webcams.NextHuskyLens
 import dev.nextftc.robot.Mechanism
 import org.firstinspires.ftc.teamcode.core.Config
 import org.firstinspires.ftc.teamcode.core.PoseManager
+import org.firstinspires.ftc.teamcode.core.Dimensions
 
 class HiveManager : Mechanism {
     val HIVE_PITCH_TOLERANCE = 5
@@ -30,14 +31,12 @@ class HiveManager : Mechanism {
         huskyLens.selectAlgorithm(HuskyLens.Algorithm.TAG_RECOGNITION)
     }
 
-    fun visionUpdate() = instant {
+    fun updateVision() {
         val matchingBlock = huskyLens.blocks()
-            .firstOrNull { block -> block.id == targetTagId }
+            .firstOrNull { it.id == targetTagId }
 
         if (matchingBlock != null) {
             targetVisible = true
-
-            // Center of the HuskyLens image is x=160, y=120.
             targetHorizontalPixelOffset = matchingBlock.x - IMAGE_CENTER_X
             targetVerticalPixelOffset = matchingBlock.y - IMAGE_CENTER_Y
         } else {
@@ -61,10 +60,9 @@ class HiveManager : Mechanism {
 
     fun getTargetPose(): Pose {
         val targetX = 62.0
-        val targetY = if (hiveOnRight) 56.0 else 144.0 - 56.0
+        val targetY = if (hiveOnRight) 56.0 else Dimensions.fieldLength - 56.0
         return Pose(targetX, targetY, 0.0)
     }
-
     companion object {
         private const val RED_TARGET_ID = 1
         private const val BLUE_TARGET_ID = 2

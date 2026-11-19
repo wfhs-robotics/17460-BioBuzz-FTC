@@ -7,7 +7,8 @@ enum class Config(val deviceName: String) {
     frontLeft("frontLeftMotor"),
     backLeft("backLeftMotor"),
     // Motors
-
+    indexer1("indexer1Motor"),
+    indexer2("indexer2Motor"),
     intake("intakeMotor"),
     // Turret
     launcher("launchMotor"),
