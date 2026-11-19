@@ -18,13 +18,13 @@ class Intake : Mechanism {
 
     fun intake(): Command = infinite {
         intakeMotor.throttle = 1.0
-    }
+    }.requiring(this)
 
     fun outtake(): Command = infinite {
         intakeMotor.throttle = -1.0
-    }
+    }.requiring(this)
 
     fun stop(): Command = instant {
         intakeMotor.throttle = 0.0
-    }
+    }.requiring(this)
 }

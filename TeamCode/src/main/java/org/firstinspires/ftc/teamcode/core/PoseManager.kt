@@ -1,28 +1,32 @@
 package org.firstinspires.ftc.teamcode.core
 
 import com.pedropathing.math.Pose
+import kotlin.math.atan2
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 object PoseManager {
+    fun angleDifference(a: Double, b: Double): Double {
+        return abs(atan2(sin(a - b), cos(a - b)))
+    }
     val center = Pose(0.0, 0.0, 0.0)
     val d = Dimensions
     val masterResetPose = Pose(d.robotLengthCenterBack, d.robotWidthCenter, 0.0)
     var EndPose: Pose = masterResetPose
     var redAlliance = true
 
-    val baseResetPostions = arrayOf(
+    val baseResetPositions = arrayOf(
         // Right Corner
         Pose(d.robotLengthCenterBack, d.robotWidthCenter, 0.0),
-        Pose(d.robotWidthCenter, d.robotLengthCenterBack, 90.0),
+        Pose(d.robotWidthCenter, d.robotLengthCenterBack, Math.toRadians(90.0)),
         // Right Side Flower
         Pose(d.robotLengthCenterBack, d.distanceFlowerEdgeFieldRightCorner - d.robotWidthCenter, 0.0),
-        Pose(d.robotWidthCenter, d.distanceFlowerEdgeFieldRightCorner - d.robotLengthCenterBack, 90.0),
+        Pose(d.robotWidthCenter, d.distanceFlowerEdgeFieldRightCorner - d.robotLengthCenterBack, Math.toRadians(90.0)),
         // Left Side Flower
         Pose(d.robotLengthCenterBack, d.distanceFlowerEdgeFieldRightCorner + d.flowerLength + d.robotWidthCenter, 0.0),
-        Pose(d.robotWidthCenter, d.distanceFlowerEdgeFieldRightCorner + d.flowerLength + d.robotLengthCenterBack, 90.0),
+        Pose(d.robotWidthCenter, d.distanceFlowerEdgeFieldRightCorner + d.flowerLength + d.robotLengthCenterBack, Math.toRadians(90.0)),
     )
 
     var resetPoses = ArrayList<Pose>()
@@ -30,7 +34,7 @@ object PoseManager {
     init {
         var rotation = 0.0
         for (i in 1..4) {
-            baseResetPostions.forEach { resetPoses.add(rotatePose(it, center, rotation)) }
+            baseResetPositions.forEach { resetPoses.add(rotatePose(it, center, rotation)) }
             rotation += Math.PI / 2
         }
     }
@@ -50,7 +54,7 @@ object PoseManager {
     fun getPoseDistance(p1: Pose, p2: Pose): Double {
         val dx = p1.x() - p2.x()
         val dy = p1.y() - p2.y()
-        if (abs(p1.heading() - p2.heading()) > 10) return sqrt(dx * dx + dy * dy) * 2
+        if (angleDifference(p1.heading(), p2.heading()) > Math.toRadians(10.0)) { return sqrt(dx * dx + dy * dy) * 2 }
         else return sqrt(dx * dx + dy * dy)
     }
 
@@ -72,6 +76,10 @@ object PoseManager {
     }
 
     fun mirrorPose(pose: Pose): Pose {
-        return Pose(141.5 - pose.x(), pose.y(), Math.PI - pose.heading())
+        return Pose(
+            Dimensions.fieldLength - pose.x(),
+            pose.y(),
+            Math.PI - pose.heading()
+        )
     }
 }

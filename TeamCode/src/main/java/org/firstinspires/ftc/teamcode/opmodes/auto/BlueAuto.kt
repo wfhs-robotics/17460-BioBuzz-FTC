@@ -19,6 +19,7 @@ import dev.nextftc.hardware.RobotController
 import dev.nextftc.robot.opmode.NextAutonomous
 import dev.nextftc.robot.opmode.NextOpMode
 import org.firstinspires.ftc.teamcode.MyRobot
+import org.firstinspires.ftc.teamcode.core.PoseManager
 import org.firstinspires.ftc.teamcode.opmodes.OpModeStorage
 import org.firstinspires.ftc.teamcode.pedro.Constants
 
@@ -74,14 +75,14 @@ class BlueAuto(val robot: MyRobot) : NextOpMode(robot) {
     )
 
     override fun disabledPeriodic() {
-        Scheduler.reset()
+        PoseManager.redAlliance = false
         follower.setPose(start)
         follower.update()
-        schedule(autoRoutine())
     }
 
     override fun start() {
-
+        Scheduler.reset()
+        schedule(autoRoutine())
     }
 
     override fun periodic() {

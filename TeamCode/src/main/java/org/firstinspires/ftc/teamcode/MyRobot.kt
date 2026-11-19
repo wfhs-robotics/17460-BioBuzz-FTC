@@ -14,10 +14,10 @@ class MyRobot : NextRobot {
     val hiveManager by lazy { HiveManager() }
     val drivetrain by lazy { Drivetrain() }
     val intake by lazy { Intake() }
-    val turrethood by lazy { TurretHood() }
+    val turretHood by lazy { TurretHood() }
     val shooter by lazy { Shooter() }
 
-    override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turrethood, drivetrain) }
+    override val mechanisms by lazy { setOf(hiveManager, intake, shooter, turretHood, drivetrain) }
 
 
     private var _follower: Follower? = null

@@ -76,8 +76,8 @@ object BiLinearShooter {
     }
 
     fun applyShot(params: ShotParameters, robot: MyRobot) {
-        robot.turrethood.targetPosition = params.angle + robot.turrethood.manualOffset
-        robot.turrethood.update().schedule()
+        robot.turretHood.targetPosition = params.angle
+        robot.turretHood.update().schedule()
         robot.shooter.spinAtSpeed(params.velocity + robot.shooter.manualOffset).schedule()
     }
 }

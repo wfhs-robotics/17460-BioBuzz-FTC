@@ -66,8 +66,7 @@ class Shooter : Mechanism {
             active = true
             ready = false
             timer.reset()
-        }
-        .requiring(this)
+        }.requiring(this)
 
     fun stop(): Command = instant {
         active = false

@@ -12,8 +12,8 @@ class HiveManager : Mechanism {
     var hiveOnRight = true
 
 
-    private val targetTagId = if (PoseManager.redAlliance) RED_TARGET_ID else BLUE_TARGET_ID
-
+    private val targetTagId: Int
+        get() = if (PoseManager.redAlliance) RED_TARGET_ID else BLUE_TARGET_ID
     private val huskyLens = NextHuskyLens(Config.Cam.deviceName)
 
 

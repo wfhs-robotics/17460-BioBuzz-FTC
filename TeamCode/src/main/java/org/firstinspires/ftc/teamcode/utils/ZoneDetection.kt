@@ -4,7 +4,7 @@ import com.pedropathing.math.Pose
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-object ZoneDetection {
+class ZoneDetection {
     private val radius = 10.0
 
     val closeShootingZone = Triangle(
